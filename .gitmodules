@@ -1,0 +1,9 @@
+[submodule "lib/org-mode"]
+	path = lib/org-mode
+	url = git://orgmode.org/org-mode.git
+[submodule "lib/clojure-mode"]
+	path = lib/clojure-mode
+	url = https://github.com/technomancy/clojure-mode.git
+[submodule "lib/org-html-slideshow"]
+	path = lib/org-html-slideshow
+	url = git@github.com:relevance/org-html-slideshow.git

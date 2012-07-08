@@ -1,0 +1,45 @@
+#+TITLE: Clojure Tutorial
+
+#+BEGIN_HTML
+<p>Press <strong>T</strong> to toggle slide-show mode.</p>
+#+END_HTML
+
+* Tutorial
+** Clojure Overview & REPL                                            :slide:
+#+INCLUDE "clojure-overview.org" :minlevel 2
+** Functions                                                          :slide:
+#+INCLUDE "functions.org" :minlevel 2
+** Names and Namespaces                                               :slide:
+#+INCLUDE "names-and-namespaces.org" :minlevel 2
+** Collections                                                        :slide:
+#+INCLUDE "collections.org" :minlevel 2
+** Flow Control                                                       :slide:
+#+INCLUDE "flow-control.org" :minlevel 2
+* End
+#+COMMENT Bulleted lists start at outline level 4
+#+OPTIONS: h:4 toc:2
+
+#+COMMENT include results of evaluating Clojure source code in exported HTML
+#+PROPERTY: results value
+#+PROPERTY: tangle yes
+#+PROPERTY: exports code
+
+#+COMMENT org-html-slideshow
+#+TAGS: slide(s)
+
+#+STYLE: <link rel="stylesheet" type="text/css" href="../css/goog-common.css" />
+#+STYLE: <link rel="stylesheet" type="text/css" href="../css/common.css" />
+#+STYLE: <link rel="stylesheet" type="text/css" href="../css/screen.css" media="screen" />
+#+STYLE: <link rel="stylesheet" type="text/css" href="../css/projection.css" media="projection" />
+#+STYLE: <link rel="stylesheet" type="text/css" href="../css/presenter.css" media="presenter" />
+#+STYLE: <link rel="stylesheet" type="text/css" href="../css/print.css" media="print" />
+
+#+BEGIN_HTML
+<script type="text/javascript" src="../../lib/org-html-slideshow/production/org-html-slideshow.js"></script>
+#+END_HTML
+
+# Local Variables:
+# org-export-html-style-include-default: nil
+# org-export-html-style-include-scripts: nil
+# buffer-file-coding-system: utf-8-unix
+# End:

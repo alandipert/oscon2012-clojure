@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+cd `dirname $0`/..
+
+exec emacs -q -nw --batch \
+    -L lib/org-mode/lisp \
+    -L lib/clojure-mode \
+    -L lib \
+    -l src/elisp/build.el \
+    --kill

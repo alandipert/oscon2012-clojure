@@ -1,0 +1,38 @@
+* Must Have
+** DONE CI / scripted build
+*** Dependencies
+**** org-html-slides
+**** org-mode
+**** htmlize
+**** clojure-mode
+** TODO Designer review
+*** Margins
+*** Auto-Scaling to fit window?
+*** Fonts
+*** Margins
+*** Subtle background
+** TODO "Cover" slides with different styling
+*** Slides can have additional org-mode tags
+*** org-mode tags will become classes on the slide's DIV
+*** Just need to add CSS
+** TODO Content uniformity
+*** Placement of comments: before/after code
+*** Bullets: first word capitalized, no periods
+* Nice to Have
+** DONE Syntax highlighting
+*** Org-mode HTML export with recent htmlize.el
+**** Depends on active Emacs theme
+*** [[http://www.deepbluelambda.org/programs/sh-clojure/new-clojure-brush-for-syntaxhighlighter][Clojure Syntax Highlighter]] in JavaScript
+** Scripted images / progressive display?
+** Presenter notes
+*** org-mode comments not visible in the DOM?
+*** Another headline tag for notes?
+*** org-mode drawers?
+** Presenter display with notes & time & next slide
+** Slide transitions
+** End each section with summary + links to outside resources?
+* Amazing to Have
+** Presenter REPL
+** Remote access to presenter REPL
+*** Students queue up for access
+*** Type into presenter's REPL

@@ -1,0 +1,246 @@
+#+TITLE: Flow Control
+#+TAGS: slide(s)
+#+COMMENT many of these covered in special ops/forms (A:78-80,296,297,306)
+
+* Introduction
+** Statements vs. Expressions in Java                                 :slide:
+*** Expressions return values, statements do not
+#+begin_src java
+  // if is a statement, because it doesn't return a value:
+  String s;
+  if(x > 10) {
+      s = "greater";
+  } else {
+      s = "greater or equal";
+  }
+  obj.someMethod(s);
+
+  // Ternary operator is an expression; it returns a value:
+  obj.someMethod(x > 10 ? "greater" : "greater or equal");
+#+end_src
+** Expressions in Clojure                                             :slide:
+*** Everything in Clojure is an expression
+**** Always returns a value
+**** A block of multiple expressions returns the last value
+***** E.g., =let=, =do=, =fn=
+**** Expressions exclusively for side-effects return =nil=
+** Flow Control Expressions                                           :slide:
+*** Flow control operators are expressions too
+*** Composable, can use them anywhere
+**** Less duplicate code
+**** Fewer intermediate variables
+*** Extensible, via macros
+**** E.g., =when-let=
+** Truthiness                                                         :slide:
+#+begin_src clojure
+  (if true :truthy :falsey)
+  ;;=> :truthy
+  (if (Object.) :truthy :falsey) ; objects are true
+  ;;=> :truthy
+  (if [] :truthy :falsey) ; empty collections are true
+  ;;=> :truthy
+
+  (if false :truthy :falsey)
+  ;;=> :falsey
+  (if nil :truthy :falsey) ; nil is false
+  ;;=> :falsey
+  (if (seq []) :truthy :falsey) ; seq on empty coll is nil
+  ;;=> :falsey
+#+end_src
+** Truthiness                                                         :slide:
+*** Be careful with =Boolean= objects!
+#+begin_src clojure
+  (if Boolean/FALSE :truthy :falsey)
+  ;;=> :falsey
+  (def evil-false (Boolean. false))
+  ;;=> #user/evil-false
+  (= evil-false false)
+  ;;=> true
+  (if evil-false :truthy :falsey)
+  ;;=> :truthy ; !?!!
+#+end_src
+** if                                                                 :slide:
+#+begin_src clojure
+  (str "2 is " (if (even? 2) "even" "odd"))
+  ;;=> "2 is even"
+
+  ; else-expression is optional
+  (if (true? false) "impossible!")
+  ;;=> nil
+#+end_src
+** if/do                                                              :slide:
+*** Multiple expressions per branch
+*** Last value in branch returned
+#+begin_src clojure
+  (if (even? 5)
+    (do (println "even")
+        true)
+    (do (println "odd")
+        false)) ;=> false
+  ;; odd
+#+end_src
+** if-let                                                             :slide:
+*** Often want =let= as =if= branch, instead of =do=
+*** =if-let= combines the forms
+*** Only one binding form allowed, tested for truthiness
+#+begin_src clojure
+  (if-let [x (even? 3)]
+    (println x)
+    (println "some odd value"))
+#+end_src
+** cond                                                               :slide:
+*** Series of tests and expressions
+*** =:else= expression is optional
+#+begin_src clojure
+  (cond
+   test1 expression1
+   test2 expression2
+   ...
+   :else else-expression)
+#+end_src
+** cond                                                               :slide:
+#+begin_src clojure
+  (let [x 5]
+    (cond
+     (< x 2) "x is less than 2"
+     (< x 10) "x is less than 10"))
+  ;;=> "x is less than 10"
+#+end_src
+** cond with :else                                                    :slide:
+#+begin_src clojure
+  (let [x 11]
+    (cond
+     (< x 2) "x is less than 2"
+     (< x 10) "x is less than 10"
+     :else "x is greater than or equal to 10"))
+  ;;=> "x is greater than or equal to 10"
+#+end_src
+** condp                                                              :slide:
+*** Cond with shared predicate
+#+begin_src clojure
+  (defn foo [x]
+    (condp = x
+        5 "x is 5"
+        10 "x is 10"
+        "x isn't 5 or 10"))
+  (foo 11) ;=> "x isn't 5 or 10"
+#+end_src
+** case                                                               :slide:
+*** Predicate always =
+*** Test-values must be compile-time literals
+*** Match is O(1)
+*** Else-expression has no test value
+#+begin_src clojure
+  (defn foo [x]
+    (case x
+        5 "x is 5"
+        10 "x is 10"
+        "x isn't 5 or 10"))
+  (foo 11) ;=> "x isn't 5 or 10"
+#+end_src
+** Recursion and Iteration                                            :slide:
+*** Clojure provides =loop= and the sequence abstraction
+*** =loop= is "classic" recursion
+**** Closed to consumers, lower-level
+*** Sequences represent iteration as values
+**** Consumers can partially iterate
+
+* Iteration
+
+** doseq                                                              :slide:
+*** Iterates over a sequence
+**** Similar to Java's foreach loop
+*** If a lazy sequence, =doseq= forces evaluation
+#+begin_src clojure
+  (doseq [n (range 3)]
+    (println n))
+  ;; 0
+  ;; 1
+  ;; 2
+  ;;=> nil
+#+end_src
+** =doseq= with multiple bindings                                     :slide:
+*** Similar to nested foreach loops
+*** Processes all permutations of sequence content
+** dotimes                                                            :slide:
+*** Evaluate expression n times
+#+begin_src clojure
+  (dotimes [i 3]
+    (println i))
+  ;; 0
+  ;; 1
+  ;; 2
+  ;;=> nil
+#+end_src
+** while                                                              :slide:
+*** Evaluate expression while condition is true
+#+begin_src clojure
+  (while (.accept socket)
+    (handle socket))
+#+end_src
+** Clojure's for                                                      :slide:
+*** List comprehension, NOT a for-loop
+*** Generator function for sequence permutation
+#+begin_src clojure
+  (for [x [0 1]
+        y [0 1]]
+    [x y])
+  ;;=> ([0 0] [0 1] [1 0] [1 1]) ; seq
+#+end_src
+* Loop and Recur
+** loop/recur                                                         :slide:
+*** Functional looping construct
+**** =loop= defines bindings
+**** =recur= re-executes =loop= with new bindings
+*** Prefer higher-order library fns
+#+begin_src clojure
+  (loop [i 0]
+    (if (< i 10)
+      (recur (inc i))
+      i)) ;=> 10
+#+end_src
+** defn/recur                                                         :slide:
+*** fn arguments are bindings
+#+begin_src clojure
+  (defn increase [i]
+    (if (< i 10)
+      (recur (inc i))
+      i))
+  (increase 1) ;=> 10
+#+end_src
+** =recur= for recursion                                              :slide:
+*** =recur= must be in "tail position"
+**** The last expression in a branch
+*** =recur= must provide values for all bound symbols by position
+**** Loop bindings
+**** defn/fn args
+*** Recursion via =recur= does not consume stack
+* Exceptions
+** Exception handling                                                 :slide:
+*** try/catch/finally
+**** as in Java
+#+begin_src clojure
+  (try
+    (/ 2 1)
+    (catch ArithmeticException e
+      "divide by zero")
+    (finally
+     (println "cleanup")))
+  ;; cleanup
+  ;;=> 2
+#+end_src
+** Throwing exceptions                                                :slide:
+#+begin_src clojure
+  (try
+    (throw (Exception. "something went wrong"))
+    (catch Exception e (.getMessage e)))
+  ;;=> "something went wrong"
+#+end_src
+** with-open                                                          :slide:
+*** JDK7 introduces try-with-resources
+*** Clojure provides =with-open= for similar purposes
+#+begin_src clojure
+  (require '[clojure.java.io :as io])
+  (with-open [f (io/writer "/tmp/new")]
+    (.write f "some text"))
+#+end_src

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd `dirname $0`/..
+
+DATE=`date '+%Y%m%d'`
+
+BASENAME="clojure-tutorial-$DATE"
+OUT="out/$BASENAME"
+ASSETS="$OUT/slide-assets"
+
+echo "Creating directories under $OUT ..."
+
+rm -rf "$OUT"
+mkdir -p "$ASSETS" "$LIB" "$SRC" "$CLASSES"
+
+echo "Copying slides, images, and JavaScript ..."
+
+cp "lib/org-html-slideshow/production/org-html-slideshow.js" "$ASSETS"
+cp -r src/css/* "$ASSETS"
+cp src/images/* "$ASSETS"
+cp "src/org/topic-outline.html" "$OUT/slides-and-labs.html"
+
+
+echo "Transforming links in slide HTML ..."
+
+perl -p -i -e 's/\.\.\/css/slide-assets/go; s/\.\.\/images/slide-assets/go; s/\.\.\/\.\.\/lib\/org-html-slideshow\/production\/org-html-slideshow\.js/slide-assets\/org-html-slideshow.js/' "$OUT/slides-and-labs.html"
+
+for i in $OUT/slide-assets/*.css; do
+    perl -p -i -e 's/\.\.\/images\///go;' $i
+done
+
+echo "Creating $BASENAME.zip ..."
+
+(
+    cd "out"
+    rm -f "$BASENAME.zip"
+    zip -r "$BASENAME" "$BASENAME"
+)
+
+echo "Done."

@@ -1,0 +1,257 @@
+#+TITLE: Functions
+
+#+COMMENT moved operation forms from Flow Control
+#+TAGS: slide(s) notes(n)
+
+* Motivation                                                          :slide:
+- Clojure is a functional language
+- Functions are a first-class abstraction
+- Ubiquitous support for high-order functions
+- Core code (almost) entirely pure functions
+  - i.e., no side-effects
+- The obvious place to start...
+
+* Functions                                                           :slide:
+
+- Functions are first-class abstractions in Clojure
+  - Can be stored, passed as argument, invoked
+- =fn= creates a function with named parameters and body
+
+#+begin_src clojure
+  ;;      params         body
+  ;;     ---------  ---------------
+    (fn  [message]  (print message) )
+ 
+  ;;=> #<user$eval484$fn__485@45d1c3cd>
+#+end_src
+
+* Invoking Functions                                                  :slide:
+
+- =(op ...)=
+- Invoke a function with =fn= itself in function position
+
+#+begin_src clojure
+  (  (fn [message] (print message))  ; Operation
+     "Hello world!"                  ; Arguments
+  )
+  ;; Hello world!
+#+end_src
+
+** Instructor notes                                                   :notes:
+
+- The extra whitespace helps show the structure
+- Normally we would not use so much whitespace
+
+* Naming functions                                                    :slide:
+
+- =fn= makes /anonymous/ functions
+- Store function in a named /Var/ for later use
+- Invoke as list with name in function position
+
+#+begin_src clojure
+  (def messenger (fn [msg] (print msg)))
+  ;;=> #'user/messenger
+
+  (defn messenger [msg] (print msg))
+  ;;=> #'user/messenger
+
+  (messenger "Hello world!")
+  ;; Hello world!
+#+end_src
+
+* =let=                                                               :slide:
+
+- =let= binds /symbols/ to immutable /values/
+  - Values may be literals or expressions
+- Bound symbols are available in /lexical scope/
+
+#+begin_src clojure
+  (defn messenger [msg]
+    (let [a 7
+          b 5
+          c (capitalize msg)]
+      (println a b c)
+    )  ; end of 'let' scope
+  )  ; end of function
+#+end_src
+
+** Notes                                                              :notes:
+
+- Again, extra whitespace to show structure
+
+* Multi-arity functions                                               :slide:
+
+- Can overload function by *arity*
+  - Arity: number of arguments
+- Each arity is a list =([args*] body*)=
+- One form can invoke another
+
+#+begin_src clojure
+  (defn messenger
+    ;; no args, call self with default msg
+    ([] (messenger "Hello world!"))
+    ;; one arg, print it
+    ([msg] (print msg)))
+
+  (messenger)
+  ;; Hello world!
+  (messenger "Hello class!")
+  ;; Hello class!
+#+end_src
+
+* Variadic functions                                                  :slide:
+
+- *Variadic:* function of indefinite arity
+  - Only one allowed when overloading on arity
+- =&= symbol in params 
+  - Next param collects all remaining args
+  - Collected args represented as sequence
+
+#+begin_src clojure
+  (defn messenger [greeting & who]
+    (print greeting who))
+
+  (messenger "Hello" "world" "class")
+  ;; Hello (world class)
+#+end_src
+
+** Notes                                                              :notes:
+
+- Sequences look and behave like lists
+
+* =apply=                                                             :slide:
+
+- Invokes function on arguments
+- Final argument is a sequence
+- "Unpacks" remaining arguments from a sequence
+
+#+begin_src clojure
+  (let [a 1
+        b 2
+        more '(3 4)]
+    (apply f a b more))
+  ;; this invokes (f 1 2 3 4)
+#+end_src
+
+* =apply=                                                             :slide:
+
+#+begin_src clojure
+  ;; & puts rest of args into sequence
+  (defn messenger [greeting & who]
+    ;; apply gets args out of sequence
+    (apply print greeting who))
+
+  (messenger "Hello" "world" "class")
+  ;; Hello world class
+#+end_src
+
+** Notes                                                              :notes:
+
+- Similar to =*splat= in Ruby
+
+* Closures                                                            :slide:
+
+- =fn= "closes" over surrounding lexical scope
+  - Creates a /closure/
+- Closed-over references persist beyond lexical scope
+
+#+begin_src clojure
+  (defn messenger-builder [greeting]
+    (fn [who] (print greeting who))) ; closes over greeting
+
+  ;; greeting provided here, then goes out of scope
+  (def hello-er (messenger-builder "Hello"))
+
+  ;; greeting still available because hello-er is closure
+  (hello-er "world!")
+  ;; Hello world!
+#+end_src
+
+* Invoking Java code                                                  :slide:
+
+- Clojure provides operational forms for Java invocation
+
+| Task            | Java                | Clojure            |
+|-----------------+---------------------+--------------------|
+| Instantiation   | =new Widget("foo")= | =(Widget. "foo")=  |
+| Instance method | =rnd.nextInt()=     | =(.nextInt rnd)=   |
+| Instance field  | =object.field=      | =(.-field object)= |
+| Static method   | =Math.sqrt(25)=     | =(Math/sqrt 25)=   |
+| Static field    | =Math.PI=           | =Math/PI=          |
+
+* Chaining access                                                     :slide:
+
+| Language      | Syntax                               |
+|---------------+--------------------------------------|
+| java          | =person.getAddress().getZipCode()=   |
+| clojure       | =(.getZipCode (.getAddress person))= |
+| clojure sugar | =(.. person getAddress getZipCode)=  |
+
+** Notes                                                              :notes:
+
+- Just a taste of macros
+- Clojure has fewer parens than Java!
+
+* Atomic data types                                                   :slide:
+
+| Type                        | Example               | Java equivalent     |
+|-----------------------------+-----------------------+---------------------|
+| string                      | @<code>"foo"@</code>  | String              |
+| character                   | =\f=                  | Character           |
+| regex                       | @<code>#"fo*"@</code> | Pattern             |
+| integer                     | =42=                  | Long                |
+| arbitrary-precision integer | =42N=                 | clojure.lang.BigInt |
+| double                      | =3.14159=             | Double              |
+| arbitrary-precision decimal | =3.14159M=            | BigDecimal          |
+
+** Notes                                                              :notes:
+
+- Clojure types are Java types
+- clojure.lang.BigInt fixes bugs in Java BigInteger
+
+** Atomic data types                                                  :slide:
+
+| Type                        | Example    | Java equivalent      |
+|-----------------------------+------------+----------------------|
+| boolean                     | =true=     | Boolean              |
+| nil                         | =nil=      | =null=               |
+| symbol                      | =foo=      | clojure.lang.Symbol  |
+| keyword                     | =:foo=     | clojure.lang.Keyword |
+
+** Composite data types                                              :slide:
+
+| Type   | Example       | Java equivalent |
+|--------+---------------+-----------------|
+| list   | =(1 2 3)=     | java.util.List* |
+| vector | =[4 5 6]=     | java.util.List* |
+| map    | ={:a 1 :b 2}= | java.util.Map*  |
+| set    | =#{3 7 9}=    | java.util.Set*  |
+
+- *read-only
+
+** Java methods vs functions                                          :slide:
+
+- Java methods are not Clojure functions
+- Can't store them, pass them as arguments
+- Can wrap them in functions when necessary
+
+#+begin_src clojure
+  ;; make a function to invoke .length on arg
+  (fn [obj] (.length obj))
+#+end_src
+
+* Terse fn reader macro                                               :slide:
+
+- Terse form =#()= for short fns defined inline
+  - Single argument: =%=
+  - Multiple args: =%1=, =%2=, =%3=, ...
+  - Variadic: =%&= for remaining args
+- Can't nest
+
+#+begin_src clojure
+  ;; A function to invoke .length on arg:
+  #(.length %)
+
+  ;; Wrong way to make a vector:
+  #([%])
+#+end_src

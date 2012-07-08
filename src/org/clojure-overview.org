@@ -1,0 +1,201 @@
+#+TITLE: Clojure Overview & REPL
+
+#+TAGS: slide(s)
+
+* Clojure Rationale
+** Clojure Objectives                                                 :slide:
+*** Lisp: small core, code-as-data, abstraction
+*** Functional, emphasis on immutability
+*** Support concurrency & managed state
+*** Expose and embrace host platforms
+** Why Another Lisp?                                                  :slide:
+*** Limits to change post standardization
+*** Core data structures mutable, not extensible
+*** No concurrency in specs
+*** Standard Lisps are their own platforms
+*** Good implementations already exist for JVM
+** Why the JVM?                                                       :slide:
+*** VM, not OS, is target platform of the future
+**** Type system
+**** Dynamic enforcement and safety
+**** Garbage collection
+**** Libraries
+**** Bytecode, just-in-time compilation
+** Why ClojureScript?                                                 :slide:
+*** JavaScript has reach
+**** Web browsers
+**** Mobile devices
+**** Databases, PDF, etc.
+*** JavaScript VMs getting faster
+*** Clojure is simpler, more powerful, & more robust than JS
+** Clojure and ClojureScript                                          :slide:
+*** This course will focus on Clojure
+*** Code with no interop calls mostly works in both
+*** Host platforms are different
+**** Interop calls
+**** Native types (strings, numbers)
+*** Can exchange serialized data with both
+* Evaluation and the REPL
+** The REPL                                                           :slide:
+#+begin_src clojure
+  user=> (+ 3 4)  ; Read
+                  ; Eval
+  7               ; Print
+  user=>          ; Loop
+#+end_src
+** Traditional Evaluation                                             :slide:
+[[file:../images/traditional-evaluation.svg]]
+** Clojure Evaluation                                                 :slide:
+[[file:../images/clojure-interactive-evaluation.svg]]
+* Basic Syntax
+** Operation Forms                                                    :slide:
+#+begin_src clojure
+  (op ... )
+#+end_src
+*** op can be either:
+**** special operator or macro
+**** expression which yields a function
+***** more generally, something invocable
+
+** Structure vs. Semantics                                            :slide:
+[[file:../images/structure-and-semantics.svg]]
+
+** Literals (1)                                                       :slide:
+#+begin_src clojure
+  42           ; Long
+  6.022e23     ; Double
+
+  42N          ; BigInt
+  1.0M         ; BigDecimal
+  22/7         ; Ratio
+
+  "hello"      ; String
+  \e           ; Character
+#+end_src
+
+** Literals (2)                                                       :slide:
+#+begin_src clojure
+  true  false        ; Booleans
+
+  nil                ; null
+
+  +  Fred  *bob*     ; Symbols
+
+  :alpha  :beta      ; Keywords
+#+end_src
+
+** Data Structures                                                    :slide:
+#+begin_src clojure
+  (4 :alpha 3.0)     ; List
+
+  [2 "hello" 99]     ; Vector
+
+  {:a 1, :b 2}       ; Map
+
+  #{alice jim bob}   ; Set
+#+end_src
+
+*** Note: commas are whitespace
+
+** Metadata                                                           :slide:
+#+begin_src clojure
+  (with-meta [1 2 3] {:example true})
+  ;;=> [1 2 3]
+
+  (meta (with-meta [1 2 3] {:example true}))
+  ;;=> {:example true}
+#+end_src
+
+** Reader Macros                                                      :slide:
+| Reader Macro    | Expansion                   |
+|-----------------+-----------------------------|
+| 'foo            | (quote foo)                 |
+| #'foo           | (var foo)                   |
+| @foo            | (deref foo)                 |
+| #(+ % 5)        | (fn [x] (+ x 5))            |
+| ^ {:key val} foo | (with-meta foo {:key val})  |
+| ^:key foo       | (with-meta foo {:key true}) |
+
+* Discoverability of the environment
+** doc                                                                :slide:
+#+begin_src clojure
+  user=> (use 'clojure.repl)
+
+  user=> (doc when)
+  ;; -------------------------
+  ;; clojure.core/when
+  ;; ([test & body])
+  ;; Macro
+  ;;   Evaluates test. If logical true, evaluates
+  ;;   body in an implicit do.
+  ;;=> nil
+#+end_src
+** find-doc                                                           :slide:
+#+begin_src clojure
+  user=> (find-doc "sequence")
+  ;; ... all definitions with "sequence"
+  ;; in their documentation ...
+  ;;=> nil
+#+end_src
+** apropos                                                            :slide:
+#+begin_src clojure
+  user=> (apropos "map")
+  ;;=> (sorted-map ns-unmap zipmap map mapcat
+  ;;  sorted-map-by map? amap struct-map
+  ;;  proxy-mappings pmap map-indexed
+  ;;  ns-map array-map hash-map)
+#+end_src
+** source                                                             :slide:
+#+begin_src clojure
+  user=> (source take)
+  ;; (defn take
+  ;;   "Returns a lazy sequence of the first n items
+  ;;   in coll, or all items if there are fewer than n."
+  ;;   {:added "1.0"
+  ;;    :static true}
+  ;;   [n coll]
+  ;;   (lazy-seq
+  ;;    (when (pos? n)
+  ;;      (when-let [s (seq coll)]
+  ;;       (cons (first s) (take (dec n) (rest s)))))))
+  ;;=> nil
+#+end_src
+** dir                                                                :slide:
+#+begin_src clojure
+  user=> (dir clojure.repl)
+  ;; apropos
+  ;; demunge
+  ;; dir
+  ;; dir-fn
+  ;; doc
+  ;; find-doc
+  ;; pst
+  ;; root-cause
+  ;; set-break-handler!
+  ;; source
+  ;; source-fn
+  ;; stack-element-str
+  ;; thread-stopper
+  ;;=> nil
+#+end_src
+* Files and Directories
+** Leiningen directory structure                                      :slide:
+| Path        | Purpose                   |
+|-------------+---------------------------|
+| project.clj | Project/build config      |
+| classes/    | Compiled bytecode         |
+| lib/        | Dependent JARs            |
+| public/     | HTML/CSS/JS files for web |
+| src/        | Clojure source            |
+| test/       | Unit tests                |
+
+** Maven directory structure                                         :slide:
+| Path              | Purpose                   |
+|-------------------+---------------------------|
+| pom.xml           | Project/build config      |
+| target/classes/   | Compiled bytecode         |
+| ~/.m2/repository/ | Dependent JARs            |
+| src/main/clojure  | Clojure source            |
+| src/test/clojure  | Unit tests                |
+
+*** Used by clojure-contrib libraries

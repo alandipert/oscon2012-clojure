@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+cd `dirname $0`/..
+
+echo "Updating Git submodules ..."
+git submodule update --init
+
+echo "Compiling org-mode ..."
+(
+    cd lib/org-mode
+    make
+)
+
+echo "Done."

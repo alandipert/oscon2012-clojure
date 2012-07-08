@@ -1,0 +1,422 @@
+#+TITLE: Collections
+#+TAGS: slide(s)
+
+* Overview
+
+** Wisdom of the Ancients                                             :slide:
+
+- "It is better to have 100 functions operate on one data structure than to have 10 functions operate on 10 data structures." - Alan J. Perlis
+
+** Working With Data                                                  :slide:
+
+- Clojure provides extensive facilities for representing and manipulating data
+- Small number of data structures
+- Seq abstraction common across data structures & more
+- Large library of functions across all of them
+
+** Immutability                                                       :slide:
+
+- The values of simple types are immutable
+  - 4, 0.5, true
+- In Clojure, the values of compound data structures are immutable too
+  - Key to Clojure's concurrency model
+- Code never changes values, generates new ones to refer to instead
+- Persistent data structures ensure this is efficient in time and space
+
+** Persistent Data Structures                                         :slide:
+
+- New values built from old values + modifications
+- New values are not full copies
+- New value and old value are both available after 'changes'
+- Collection maintains its performance guarantees for most operations
+- All Clojure data structures are persistent
+
+** Example: Linked List                                               :slide:
+
+file:../images/collections-linked-list-1.svg
+
+** Example: Linked List                                               :slide:
+
+file:../images/collections-linked-list-2.svg
+
+** Example: Binary Tree                                               :slide:
+
+file:../images/collections-tree-1.svg
+
+** Example: Tree Structure                                            :slide:
+
+file:../images/collections-structural-sharing.svg
+
+** Concrete Data Structures                                           :slide:
+
+- Sequential
+  - List, Vector
+- Associative
+  - Map, Vector
+- Both types support declarative destructuring
+
+* Sequential
+
+** Lists                                                              :slide:
+
+- Singly-linked lists
+- Prepend: O(1)
+- Lookup: O(1) at head, O(n) anywhere else
+
+** List Examples                                                      :slide:
+
+#+begin_src clojure
+  ()              ;=> the empty list
+  (1 2 3)         ; error because 1 not function
+  (list 1 2 3)    ;=> (1 2 3)
+  '(1 2 3)        ;=> (1 2 3)
+  (conj '(2 3) 1) ;=> (1 2 3)
+#+end_src
+
+** Vectors                                                            :slide:
+
+- Indexed, random-access, array-like
+- Append: O(1)
+- Lookup: O(1)
+
+** Vector Examples                                                    :slide:
+
+#+begin_src clojure
+  []              ;=> the empty vector
+  [1 2 3]         ;=> [1 2 3]
+  (vector 1 2 3)  ;=> [1 2 3]
+  (vec '(1 2 3))  ;=> [1 2 3]
+  (nth [1 2 3] 0) ;=> 1
+  (conj [1 2] 3)  ;=> [1 2 3]
+#+end_src
+
+* Associative
+
+** Maps                                                               :slide:
+
+- Key => value, hash table, dictionary
+- Insert and lookup: O(1)
+- Unordered
+
+** Map Examples                                                       :slide:
+
+#+begin_src clojure
+  {}                  ;=> the empty map
+  {:a 1 :b 2}         ;=> {:a 1 :b 2}
+  (:a {:a 1 :b 2})    ;=> 1
+  ({:a 1 :b 2} :a)    ;=> 1
+  (assoc {:a 1} :b 2) ;=> {:a 1 :b 2}
+  (dissoc {:a 1} :a)  ;=> {}
+  (conj {} [:a 1])    ;=> {:a 1}
+#+end_src
+
+** Nested Access                                                      :slide:
+
+- Helper functions access data via path specified by keys
+
+#+begin_src clojure
+  (def jdoe {:name "John Doe", :address {:zip 27705}})
+
+  (get-in jdoe [:address :zip]) ;=> 27705
+
+  (assoc-in jdoe [:address :zip] 27514)
+  ;;=> {:name "John Doe", :address {:zip 27514}}
+
+  (update-in jdoe [:address :zip] inc)
+  ;;=> {:name "John Doe", :address {:zip 27706}}
+#+end_src
+
+** Sets                                                               :slide:
+
+- Set of distinct values
+- Insert: O(1)
+- Member?: O(1)
+- Unordered
+
+** Set Examples                                                       :slide:
+
+#+begin_src clojure
+  #{}                  ;=> the empty set
+  #{:a :b}             ;=> #{:a :b}
+  (#{:a :b} :a)        ;=> :a
+  (conj #{} :a)        ;=> #{:a}
+  (contains? #{:a} :a) ;=> true
+#+end_src
+
+** clojure.set Examples                                               :slide:
+
+#+begin_src clojure
+  (require '[clojure.set :as set])
+  (set/union #{:a} #{:b})              ;=> #{:a :b}
+  (set/difference #{:a :b} #{:a})      ;=> #{:b}
+  (set/intersection #{:a :b} #{:b :c}) ;=> #{:b}
+#+end_src
+
+* Destructuring
+
+** Destructuring                                                      :slide:
+
+- Declarative way to pull apart compound data
+  - vs. explicit, verbose access
+- Works for both sequential and associative data structures
+- Nests for deep, arbitrary access
+
+** Where You Can Destructure                                          :slide:
+
+- Destructuring works in =fn= and =defn= params, =let= bindings
+  - And anything built on top of them
+
+** Sequential Destructuring                                           :slide:
+
+- Provide vector of symbols to bind by position
+  - Binds to =nil= if there's no data
+
+#+begin_src clojure
+  (def stuff [7 8 9 10 11]) ;=> #'user/stuff
+  ;; Bind a, b, c to first 3 values in stuff
+  (let [[a b c] stuff]
+    (list (+ a b) (+ b c)))
+  ;;=> (15 17)
+  (let [[a b c d e f] stuff]
+    (list d e f))
+  ;;=> (10 11 nil)
+#+end_src
+
+** Sequential Destructuring                                           :slide:
+
+- Can get "everything else" with =&=
+  - Value is a sequence
+
+#+begin_src clojure
+  (def stuff [7 8 9 10 11]) ;=> #'user/stuff
+  (let [[a & others] stuff]
+    (println a)
+    (println others))
+  ;; 7
+  ;; (8 9 10 11)
+  ;;=> nil
+#+end_src
+
+** Sequential Destructuring                                           :slide:
+
+- Idiomatic to use =_= for values you don't care about
+#+begin_src clojure
+  (def stuff [7 8 9 10 11]) ;=> #'user/stuff
+  (let [[_ & others] stuff] ; skip the first one
+    (println others)))
+  ;; (8 9 10 11)
+  ;;=> nil
+#+end_src
+
+** Associative Destructuring                                          :slide:
+
+- Provide map of symbols to bind by key
+  - Binds to =nil= if there's no value
+
+#+begin_src clojure
+  (def m {:a 7 :b 4}) ;=> #'user/m
+  (let [{a :a, b :b} m]
+    [a b])
+  ;;=> [7 4]
+#+end_src
+
+** Associative Destructuring                                          :slide:
+
+- Keys can be inferred from vector of symbols to bind
+
+#+begin_src clojure
+  (def m {:a 7 :b 4}) ;=> #'user/m
+  (let [{:keys [a b]} m]
+    [a b])
+  ;;=> [7 4]
+  (let [{:keys [a b c]} m]
+    [a b c])
+  ;;=> [7 4 nil]
+#+end_src
+
+** Associative Destructuring                                          :slide:
+
+- Use =:or= to provide default values for bound keys
+
+#+begin_src clojure
+  (def m {:a 7 :b 4}) ;=> #'user/m
+  (let [{:keys [a b c]
+         :or {c 3}} m]
+    [a b c])
+  ;;=> [7 4 3]
+#+end_src
+
+** Named Arguments                                                    :slide:
+
+- Applying vector of keys to =&= binding emulates named args
+
+#+begin_src clojure
+  (defn game [planet & {:keys [human-players computer-players]}]
+    (println "Total players: " (+ human-players computer-players)))
+
+  (game "Mars" :human-players 1 :computer-players 2)
+  ;; Total players: 3
+#+end_src
+
+* Sequences
+
+** Sequences                                                          :slide:
+
+- Abstraction for representing iteration
+- Backed by a data structure or a function
+  - Can be lazy and/or "infinite"
+- Foundation for large library of functions
+
+** Sequence API                                                       :slide:
+
+- =(seq coll)=
+  - If collection is non-empty, return seq object on it, else =nil=
+  - Can't recover input source from seq
+- =(first coll)=
+  - Returns the first element
+- =(rest coll)=
+  - Returns a sequence of the rest of the elements
+- =(cons x coll)=
+  - Returns a new sequence: first is x, rest is coll
+
+** Sequences Over Structures                                          :slide:
+
+- Can treat any Clojure data structure as a seq
+  - Associative structures treated as sequence of pairs
+
+#+begin_src clojure
+  (def a-list '(1 2 3)) ;=> #'user/a-list
+#+end_src
+
+file:../images/collections-seq-list-initial.svg
+
+** Sequence Over Structure                                            :slide:
+
+#+begin_src clojure
+  (first a-list) ;=> 1
+#+end_src
+
+file:../images/collections-seq-list-first.svg
+
+** Sequence Over Structure                                            :slide:
+
+#+begin_src clojure
+  (second a-list) ;=> 2
+#+end_src
+
+file:../images/collections-seq-list-second.svg
+
+** Sequence Over Structure                                            :slide:
+
+#+begin_src clojure
+  (rest a-list) ; seq
+#+end_src
+
+file:../images/collections-seq-list-rest.svg
+
+** Sequences Over Functions                                           :slide:
+
+- Can map a generator function to a seq
+- Seq is lazy, can be infinite
+  - Can process more than fits in memory
+
+#+begin_src clojure
+  (def a-range (range 1 4)) ;=> #'user/a-range
+#+end_src
+
+file:../images/collections-seq-lazy-initial.svg
+
+** Sequences Over Functions                                           :slide:
+
+#+begin_src clojure
+  (first a-range) ;=> 1
+#+end_src
+
+file:../images/collections-seq-lazy-first.svg
+
+** Sequences Over Functions                                           :slide:
+
+#+begin_src clojure
+  (second a-range) ;=> 2
+#+end_src
+
+file:../images/collections-seq-lazy-second.svg
+
+** Sequences Over Functions                                           :slide:
+
+#+begin_src clojure
+  (rest a-range) ; seq
+#+end_src
+
+file:../images/collections-seq-lazy-rest.svg
+
+** Sequences in the REPL                                              :slide:
+
+- REPL always prints sequences with parens
+  - But it's not a list!
+- Infinite sequences take a long time to print
+
+#+begin_src clojure
+  (set! *print-length* 10) ; only print 10 things
+#+end_src
+
+** Sequence Library                                                   :slide:
+
+- Generators
+  - list, vector, map, SQL ResultSet, Stream, Directory, Iterator, XML, ...
+- Operations
+  - map, filter, reduce, count, some, replace, ...
+- Generators * Operations = Power!
+
+** Creating a Sequence                                                :slide:
+
+#+begin_src clojure
+  (seq [1 2 3]) ;=> (1 2 3)  ; not a list
+  (range) ;=> (0 1 2 ... infinite
+  (range 3) ;=> (0 1 2)
+  (range 1 7 2) ;=> (1 3 5)
+  (iterate #(* 2 %) 2) ;=> (2 4 8 16 ... infinite
+  (re-seq #"[aeiou]" "clojure") ;=> ("o" "u" "e")
+#+end_src
+
+** Seq in, Seq out                                                    :slide:
+
+#+begin_src clojure
+  (take 3 (range)) ;=> (0 1 2)
+  (drop 3 (range)) ;=> (3 4 5 ... infinite
+  (map #(* % %) [0 1 2 3]) ;=> (0 1 4 9) ; vector treated as seq
+  (filter even? (range)) ;=> (0 2 4 6 ... infinite
+  (apply str (interpose "," (range 3))) ;=> "0,1,2"
+#+end_src
+
+** Using a Seq                                                        :slide:
+
+#+begin_src clojure
+  (reduce + (range 4)) ;=> 6
+  (reduce + 10 (range 4)) ;=> 16
+  (into #{} "hello") ;=> #{\e \h \l \o}
+  (into {} [[:x 1] [:y 2]]) ;=> {:x 1, :y 2}
+  (some {2 :b 3 :c} [1 nil 2 3]) ;=> :b
+#+end_src
+
+** Adopting the Sequence Mindset                                      :slide:
+
+- Sequence library surface space is big
+- Most things you want to do are in there somewhere
+- If you find yourself explicitly iterating, look for a function
+- The Clojure Cheatsheet helps
+- http://clojure.org/cheatsheet
+
+** The Fibonacci Sequence                                             :slide:
+
+#+begin_src clojure
+(def fibs            ; define a sequence called fibs...
+  (map first         ; that maps the first value of a pair across...
+    (iterate         ; a lazy, infinite sequnce that's generated by...
+      (fn [[a b]]    ; a function that destructures a pair of args...
+        [b (+ a b)]) ; and returns the next pair in the sequence...
+      [0 1])))       ; starting at [0 1]
+
+(take 5 fibs)        ; consume as many as you'd like
+;;=> (0 1 1 2 3)
+#+end_src

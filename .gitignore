@@ -1,0 +1,7 @@
+/classes
+/lib/jars
+/.lein-deps-sum
+/out
+/src/org/*.html
+.DS_Store
+*~
