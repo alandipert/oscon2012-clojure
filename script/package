@@ -13,7 +13,7 @@ ASSETS="$OUT/slide-assets"
 echo "Creating directories under $OUT ..."
 
 rm -rf "$OUT"
-mkdir -p "$ASSETS" "$LIB" "$SRC" "$CLASSES"
+mkdir -p "$ASSETS"
 
 echo "Copying slides, images, and JavaScript ..."
 
