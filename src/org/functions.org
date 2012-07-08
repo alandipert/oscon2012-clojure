@@ -167,79 +167,6 @@
   ;; Hello world!
 #+end_src
 
-* Invoking Java code                                                  :slide:
-
-- Clojure provides operational forms for Java invocation
-
-| Task            | Java                | Clojure            |
-|-----------------+---------------------+--------------------|
-| Instantiation   | =new Widget("foo")= | =(Widget. "foo")=  |
-| Instance method | =rnd.nextInt()=     | =(.nextInt rnd)=   |
-| Instance field  | =object.field=      | =(.-field object)= |
-| Static method   | =Math.sqrt(25)=     | =(Math/sqrt 25)=   |
-| Static field    | =Math.PI=           | =Math/PI=          |
-
-* Chaining access                                                     :slide:
-
-| Language      | Syntax                               |
-|---------------+--------------------------------------|
-| java          | =person.getAddress().getZipCode()=   |
-| clojure       | =(.getZipCode (.getAddress person))= |
-| clojure sugar | =(.. person getAddress getZipCode)=  |
-
-** Notes                                                              :notes:
-
-- Just a taste of macros
-- Clojure has fewer parens than Java!
-
-* Atomic data types                                                   :slide:
-
-| Type                        | Example               | Java equivalent     |
-|-----------------------------+-----------------------+---------------------|
-| string                      | @<code>"foo"@</code>  | String              |
-| character                   | =\f=                  | Character           |
-| regex                       | @<code>#"fo*"@</code> | Pattern             |
-| integer                     | =42=                  | Long                |
-| arbitrary-precision integer | =42N=                 | clojure.lang.BigInt |
-| double                      | =3.14159=             | Double              |
-| arbitrary-precision decimal | =3.14159M=            | BigDecimal          |
-
-** Notes                                                              :notes:
-
-- Clojure types are Java types
-- clojure.lang.BigInt fixes bugs in Java BigInteger
-
-** Atomic data types                                                  :slide:
-
-| Type                        | Example    | Java equivalent      |
-|-----------------------------+------------+----------------------|
-| boolean                     | =true=     | Boolean              |
-| nil                         | =nil=      | =null=               |
-| symbol                      | =foo=      | clojure.lang.Symbol  |
-| keyword                     | =:foo=     | clojure.lang.Keyword |
-
-** Composite data types                                              :slide:
-
-| Type   | Example       | Java equivalent |
-|--------+---------------+-----------------|
-| list   | =(1 2 3)=     | java.util.List* |
-| vector | =[4 5 6]=     | java.util.List* |
-| map    | ={:a 1 :b 2}= | java.util.Map*  |
-| set    | =#{3 7 9}=    | java.util.Set*  |
-
-- *read-only
-
-** Java methods vs functions                                          :slide:
-
-- Java methods are not Clojure functions
-- Can't store them, pass them as arguments
-- Can wrap them in functions when necessary
-
-#+begin_src clojure
-  ;; make a function to invoke .length on arg
-  (fn [obj] (.length obj))
-#+end_src
-
 * Terse fn reader macro                                               :slide:
 
 - Terse form =#()= for short fns defined inline
@@ -249,8 +176,8 @@
 - Can't nest
 
 #+begin_src clojure
-  ;; A function to invoke .length on arg:
-  #(.length %)
+  ;; A function to call length on arg:
+  #(length %)
 
   ;; Wrong way to make a vector:
   #([%])
