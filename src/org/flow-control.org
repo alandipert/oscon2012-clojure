@@ -3,21 +3,6 @@
 #+COMMENT many of these covered in special ops/forms (A:78-80,296,297,306)
 
 * Introduction
-** Statements vs. Expressions in Java                                 :slide:
-*** Expressions return values, statements do not
-#+begin_src java
-  // if is a statement, because it doesn't return a value:
-  String s;
-  if(x > 10) {
-      s = "greater";
-  } else {
-      s = "greater or equal";
-  }
-  obj.someMethod(s);
-
-  // Ternary operator is an expression; it returns a value:
-  obj.someMethod(x > 10 ? "greater" : "greater or equal");
-#+end_src
 ** Expressions in Clojure                                             :slide:
 *** Everything in Clojure is an expression
 **** Always returns a value
@@ -29,8 +14,6 @@
 *** Composable, can use them anywhere
 **** Less duplicate code
 **** Fewer intermediate variables
-*** Extensible, via macros
-**** E.g., =when-let=
 ** Truthiness                                                         :slide:
 #+begin_src clojure
   (if true :truthy :falsey)
@@ -46,18 +29,6 @@
   ;;=> :falsey
   (if (seq []) :truthy :falsey) ; seq on empty coll is nil
   ;;=> :falsey
-#+end_src
-** Truthiness                                                         :slide:
-*** Be careful with =Boolean= objects!
-#+begin_src clojure
-  (if Boolean/FALSE :truthy :falsey)
-  ;;=> :falsey
-  (def evil-false (Boolean. false))
-  ;;=> #user/evil-false
-  (= evil-false false)
-  ;;=> true
-  (if evil-false :truthy :falsey)
-  ;;=> :truthy ; !?!!
 #+end_src
 ** if                                                                 :slide:
 #+begin_src clojure
@@ -78,15 +49,6 @@
     (do (println "odd")
         false)) ;=> false
   ;; odd
-#+end_src
-** if-let                                                             :slide:
-*** Often want =let= as =if= branch, instead of =do=
-*** =if-let= combines the forms
-*** Only one binding form allowed, tested for truthiness
-#+begin_src clojure
-  (if-let [x (even? 3)]
-    (println x)
-    (println "some odd value"))
 #+end_src
 ** cond                                                               :slide:
 *** Series of tests and expressions
@@ -114,29 +76,6 @@
      (< x 10) "x is less than 10"
      :else "x is greater than or equal to 10"))
   ;;=> "x is greater than or equal to 10"
-#+end_src
-** condp                                                              :slide:
-*** Cond with shared predicate
-#+begin_src clojure
-  (defn foo [x]
-    (condp = x
-        5 "x is 5"
-        10 "x is 10"
-        "x isn't 5 or 10"))
-  (foo 11) ;=> "x isn't 5 or 10"
-#+end_src
-** case                                                               :slide:
-*** Predicate always =
-*** Test-values must be compile-time literals
-*** Match is O(1)
-*** Else-expression has no test value
-#+begin_src clojure
-  (defn foo [x]
-    (case x
-        5 "x is 5"
-        10 "x is 10"
-        "x isn't 5 or 10"))
-  (foo 11) ;=> "x isn't 5 or 10"
 #+end_src
 ** Recursion and Iteration                                            :slide:
 *** Clojure provides =loop= and the sequence abstraction
@@ -186,55 +125,6 @@
         y [0 1]]
     [x y])
   ;;=> ([0 0] [0 1] [1 0] [1 1]) ; seq
-#+end_src
-* Loop and Recur
-** loop/recur                                                         :slide:
-*** Functional looping construct
-**** =loop= defines bindings
-**** =recur= re-executes =loop= with new bindings
-*** Prefer higher-order library fns
-#+begin_src clojure
-  (loop [i 0]
-    (if (< i 10)
-      (recur (inc i))
-      i)) ;=> 10
-#+end_src
-** defn/recur                                                         :slide:
-*** fn arguments are bindings
-#+begin_src clojure
-  (defn increase [i]
-    (if (< i 10)
-      (recur (inc i))
-      i))
-  (increase 1) ;=> 10
-#+end_src
-** =recur= for recursion                                              :slide:
-*** =recur= must be in "tail position"
-**** The last expression in a branch
-*** =recur= must provide values for all bound symbols by position
-**** Loop bindings
-**** defn/fn args
-*** Recursion via =recur= does not consume stack
-* Exceptions
-** Exception handling                                                 :slide:
-*** try/catch/finally
-**** as in Java
-#+begin_src clojure
-  (try
-    (/ 2 1)
-    (catch ArithmeticException e
-      "divide by zero")
-    (finally
-     (println "cleanup")))
-  ;; cleanup
-  ;;=> 2
-#+end_src
-** Throwing exceptions                                                :slide:
-#+begin_src clojure
-  (try
-    (throw (Exception. "something went wrong"))
-    (catch Exception e (.getMessage e)))
-  ;;=> "something went wrong"
 #+end_src
 ** with-open                                                          :slide:
 *** JDK7 introduces try-with-resources

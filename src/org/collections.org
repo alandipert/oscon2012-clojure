@@ -60,10 +60,6 @@ file:../images/collections-structural-sharing.svg
 ** Lists                                                              :slide:
 
 - Singly-linked lists
-- Prepend: O(1)
-- Lookup: O(1) at head, O(n) anywhere else
-
-** List Examples                                                      :slide:
 
 #+begin_src clojure
   ()              ;=> the empty list
@@ -76,10 +72,6 @@ file:../images/collections-structural-sharing.svg
 ** Vectors                                                            :slide:
 
 - Indexed, random-access, array-like
-- Append: O(1)
-- Lookup: O(1)
-
-** Vector Examples                                                    :slide:
 
 #+begin_src clojure
   []              ;=> the empty vector
@@ -95,10 +87,6 @@ file:../images/collections-structural-sharing.svg
 ** Maps                                                               :slide:
 
 - Key => value, hash table, dictionary
-- Insert and lookup: O(1)
-- Unordered
-
-** Map Examples                                                       :slide:
 
 #+begin_src clojure
   {}                  ;=> the empty map
@@ -129,11 +117,6 @@ file:../images/collections-structural-sharing.svg
 ** Sets                                                               :slide:
 
 - Set of distinct values
-- Insert: O(1)
-- Member?: O(1)
-- Unordered
-
-** Set Examples                                                       :slide:
 
 #+begin_src clojure
   #{}                  ;=> the empty set

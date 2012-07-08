@@ -9,14 +9,14 @@
 #+INCLUDE "clojure-overview.org" :minlevel 2
 ** Functions                                                          :slide:
 #+INCLUDE "functions.org" :minlevel 2
+** Working with Java                                                  :slide:
+#+INCLUDE "java.org" :minlevel 2
 ** Names and Namespaces                                               :slide:
 #+INCLUDE "names-and-namespaces.org" :minlevel 2
 ** Collections                                                        :slide:
 #+INCLUDE "collections.org" :minlevel 2
 ** Flow Control                                                       :slide:
 #+INCLUDE "flow-control.org" :minlevel 2
-** Working with Java                                                  :slide:
-#+INCLUDE "java.org" :minlevel 2
 ** Clojure Projects                                                   :slide:
 #+INCLUDE "projects.org" :minlevel 2
 
@@ -48,3 +48,4 @@
 # org-export-html-style-include-scripts: nil
 # buffer-file-coding-system: utf-8-unix
 # End:
+  
