@@ -42,3 +42,34 @@ span.section-number-1,span.section-number-2,span.section-number-3,span.section-n
 .colorize-highlight { 
     color: blue;
 }
+
+code {
+  background-color: #eee;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: black;
+  font-family: Courier, monospace;
+  font-size: .9em;
+  padding: 2px 4px;
+}
+
+pre code {
+  display: block;
+  overflow: auto;
+}
+
+pre {
+  background-color: #eee;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 1px 1px 1px #999;
+  box-shadow: 1px 1px 1px #999;
+  color: black;
+  font-family: Courier, monospace;
+  margin-bottom: 40px;
+  padding: 20px;
+  line-height: initial;
+  font-size: 22px;
+}

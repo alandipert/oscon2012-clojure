@@ -35,3 +35,23 @@ pre {
 #c-panel .key {
    display: none;
 }
+
+.org-constant {
+   color: purple;
+}
+
+.org-string {
+   color: green;
+}
+
+.org-comment {
+   color: darkred;
+}
+
+.org-comment-delimiter {
+   color: darkred;
+}
+
+.org-keyword, .org-builtin, .org-variable-name {
+   color: blue;
+}
