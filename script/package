@@ -20,12 +20,12 @@ echo "Copying slides, images, and JavaScript ..."
 cp "lib/org-html-slideshow/production/org-html-slideshow.js" "$ASSETS"
 cp -r src/css/* "$ASSETS"
 cp src/images/* "$ASSETS"
-cp "src/org/topic-outline.html" "$OUT/slides-and-labs.html"
+cp "src/org/topic-outline.html" "$OUT/slides.html"
 
 
 echo "Transforming links in slide HTML ..."
 
-perl -p -i -e 's/\.\.\/css/slide-assets/go; s/\.\.\/images/slide-assets/go; s/\.\.\/\.\.\/lib\/org-html-slideshow\/production\/org-html-slideshow\.js/slide-assets\/org-html-slideshow.js/' "$OUT/slides-and-labs.html"
+perl -p -i -e 's/\.\.\/css/slide-assets/go; s/\.\.\/images/slide-assets/go; s/\.\.\/\.\.\/lib\/org-html-slideshow\/production\/org-html-slideshow\.js/slide-assets\/org-html-slideshow.js/' "$OUT/slides.html"
 
 for i in $OUT/slide-assets/*.css; do
     perl -p -i -e 's/\.\.\/images\///go;' $i
