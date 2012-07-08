@@ -15,6 +15,9 @@
 #+INCLUDE "collections.org" :minlevel 2
 ** Flow Control                                                       :slide:
 #+INCLUDE "flow-control.org" :minlevel 2
+** Projects                                                           :slide:
+#+INCLUDE "projects.org" :minlevel 2
+
 * End
 #+COMMENT Bulleted lists start at outline level 4
 #+OPTIONS: h:4 toc:2

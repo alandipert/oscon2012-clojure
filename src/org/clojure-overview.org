@@ -21,20 +21,6 @@
 **** Garbage collection
 **** Libraries
 **** Bytecode, just-in-time compilation
-** Why ClojureScript?                                                 :slide:
-*** JavaScript has reach
-**** Web browsers
-**** Mobile devices
-**** Databases, PDF, etc.
-*** JavaScript VMs getting faster
-*** Clojure is simpler, more powerful, & more robust than JS
-** Clojure and ClojureScript                                          :slide:
-*** This course will focus on Clojure
-*** Code with no interop calls mostly works in both
-*** Host platforms are different
-**** Interop calls
-**** Native types (strings, numbers)
-*** Can exchange serialized data with both
 * Evaluation and the REPL
 ** The REPL                                                           :slide:
 #+begin_src clojure
@@ -97,15 +83,6 @@
 
 *** Note: commas are whitespace
 
-** Metadata                                                           :slide:
-#+begin_src clojure
-  (with-meta [1 2 3] {:example true})
-  ;;=> [1 2 3]
-
-  (meta (with-meta [1 2 3] {:example true}))
-  ;;=> {:example true}
-#+end_src
-
 ** Reader Macros                                                      :slide:
 | Reader Macro    | Expansion                   |
 |-----------------+-----------------------------|
@@ -113,8 +90,6 @@
 | #'foo           | (var foo)                   |
 | @foo            | (deref foo)                 |
 | #(+ % 5)        | (fn [x] (+ x 5))            |
-| ^ {:key val} foo | (with-meta foo {:key val})  |
-| ^:key foo       | (with-meta foo {:key true}) |
 
 * Discoverability of the environment
 ** doc                                                                :slide:
@@ -178,24 +153,3 @@
   ;; thread-stopper
   ;;=> nil
 #+end_src
-* Files and Directories
-** Leiningen directory structure                                      :slide:
-| Path        | Purpose                   |
-|-------------+---------------------------|
-| project.clj | Project/build config      |
-| classes/    | Compiled bytecode         |
-| lib/        | Dependent JARs            |
-| public/     | HTML/CSS/JS files for web |
-| src/        | Clojure source            |
-| test/       | Unit tests                |
-
-** Maven directory structure                                         :slide:
-| Path              | Purpose                   |
-|-------------------+---------------------------|
-| pom.xml           | Project/build config      |
-| target/classes/   | Compiled bytecode         |
-| ~/.m2/repository/ | Dependent JARs            |
-| src/main/clojure  | Clojure source            |
-| src/test/clojure  | Unit tests                |
-
-*** Used by clojure-contrib libraries
