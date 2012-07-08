@@ -10,14 +10,6 @@
 *** Libraries
 *** Separate "public API" and "internal implementation"
 
-** What's in a Namespace?                                             :slide:
-*** Namespace scope
-**** Vars
-**** Keywords
-**** Java type names
-*** Local, lexical scope
-**** Function arguments
-**** =let=
 ** Namespace-Qualified Vars                                           :slide:
 #+begin_src clojure
   ;; In the namespace "foo.bar"
@@ -26,124 +18,11 @@
   ;; In another namespace
   (foo.bar/hello)   ; namespace-qualified
 #+end_src
-** Namespace-Qualified Keywords                                       :slide:
-#+begin_src clojure
-  ;; In the namespace "foo.bar"
-  :x      ; Keyword with no namespace
-
-  ::x     ; Keyword with namespace "foo.bar"
-
-  :baz/x  ; Keyword with namespace "baz"
-#+end_src
-** Namespaces in the REPL                                             :slide:
-*** =in-ns= switches to namespace
-**** Creates namespace if it doesn't exist
-*** Argument is a symbol, must be quoted
-*** REPL always starts in namespace "user"
-
-#+begin_src clojure
-  user=> (in-ns 'foo.bar.baz)
-  ;;=> nil
-  foo.bar.baz=>
-#+end_src
-
 ** Namespace Operations                                               :slide:
 *** Load: find source on classpath & eval it
 *** Alias: make shorter name for namespace-qualified symbols
 *** Refer: copy symbol bindings from another namespace into current namespace
 *** Import: make Java class names available in current namespace
-
-** =require=                                                          :slide:
-*** Loads the namespace if not already loaded
-**** Argument is a symbol, must be quoted
-*** Have to refer to things with fully-qualified names
-
-#+begin_src clojure
-  (require 'clojure.set)
-  ;;=> nil
-
-  (clojure.set/union #{1 2} #{2 3 4})
-  ;;=> #{1 2 3 4}
-#+end_src
-
-** =require :as=                                                      :slide:
-*** Loads the namespace if not already loaded
-**** Argument is a vector, must be quoted
-*** Aliases the namespace to alternate name
-
-#+begin_src clojure
-  (require '[clojure.set :as set])
-  ;;=> nil
-
-  ;; "set" is an alias for "clojure.set"
-  (set/union #{1 2} #{2 3 4})
-  ;;=> #{1 2 3 4}
-#+end_src
-
-** =use=                                                              :slide:
-*** Loads the namespace if not already loaded
-**** Argument is a symbol, must be quoted
-*** Refers all symbols into current namespace
-*** Warns when symbols clash
-*** Not recommended except for REPL exploration
-
-** =use= Example                                                      :slide:
-#+begin_src clojure
-  user=> (use 'clojure.string)
-  ;; WARNING: reverse already refers
-  ;; to: #'clojure.core/reverse in
-  ;; namespace: user, being reversed
-  ;; by: #'clojure.string/reverse
-  ;; ...
-  ;;=> nil
-  user=> (reverse "hello")
-  ;;=> "olleh"
-#+end_src
-
-** =use :only=                                                        :slide:
-*** Loads the namespace if not already loaded
-**** Argument is a vector, must be quoted
-*** Refers only specified symbols into current namespace
-
-#+begin_src clojure
-  (use '[clojure.string :only (join)])
-  ;;=> nil
-  (join "," [1 2 3])
-  ;;=> "1,2,3"
-#+end_src
-
-** Reloading Namespaces                                               :slide:
-*** By default, namespaces are loaded only once
-*** =use= and =require= take optional flags to force reload
-
-#+begin_src clojure
-  ;; Reload just the foo.bar namespace:
-  (require 'foo.bar :reload)
-
-  ;; Reload foo.bar and everything
-  ;; required or used by foo.bar:
-  (require 'foo.bar :reload-all)
-#+end_src
-
-** =import=                                                           :slide:
-*** Makes Java classes available w/o package prefix in current namespace
-**** Argument is a list, quoting is optional
-*** Does not support aliases/renaming
-*** Does not support Java's =import *=
-
-#+begin_src clojure
-  (import (java.io FileReader File))
-  ;;=> nil
-  (FileReader. (File. "readme.txt"))
-  ;;=> #<FileReader ...>
-#+end_src
-
-** Namespaces and Files                                               :slide:
-*** For require/use to work, have to find code defining namespace
-*** Clojure converts namespace name to path and looks on CLASSPATH
-**** Dots in namespace name become /
-**** Hyphens become underscores
-*** Idiomatic to define namespace per file
 
 * =ns= macro
 ** =ns= Declaration                                                   :slide:
@@ -156,38 +35,81 @@
   ;; in file foo/bar/baz_quux.clj
   (ns foo.bar.baz-quux)
 #+end_src
-
-** =ns :require=                                                      :slide:
-*** Loads other namespace with optional alias
-**** Arguments are *not* quoted
+** =require=                                                          :slide:
+*** Loads the namespace if not already loaded
+**** Argument is a symbol, must be quoted
+*** Have to refer to things with fully-qualified names
 
 #+begin_src clojure
-  (ns my.cool.project
-    (:require [some.ns.foo :as foo]))
+  (ns my-ns
+    (:require clojure.set))
+  ;;=> nil
 
-  (foo/function-in-foo)
+  (clojure.set/union #{1 2} #{2 3 4})
+  ;;=> #{1 2 3 4}
 #+end_src
 
-** =ns :use=                                                          :slide:
-*** Loads other namespace and refers symbols into namespace
-**** Arguments are *not* quoted
+** =require :as=                                                      :slide:
+*** Loads the namespace if not already loaded
+**** Argument is a vector, must be quoted
+*** Aliases the namespace to alternate name
 
 #+begin_src clojure
-  (ns my.cool.project
-    (:use [some.ns.foo :only (bar baz)]))
+  (ns my-ns
+    (:require [clojure.set :as set]))
+  ;;=> nil
 
-  (bar)  ;=> (some.ns.foo/bar)
+  ;; "set" is an alias for "clojure.set"
+  (set/union #{1 2} #{2 3 4})
+  ;;=> #{1 2 3 4}
 #+end_src
 
-** =ns :import=                                                       :slide:
-*** Loads Java library and refers symbols into namespace
-**** Arguments are *not* quoted
+** =use=                                                              :slide:
+*** Loads the namespace if not already loaded
+**** Argument is a symbol, must be quoted
+*** Refers all symbols into current namespace
+*** Warns when symbols clash
+
+** =use= Example                                                      :slide:
+#+begin_src clojure
+  (ns my-ns
+    (:use clojure.string))
+  ;; WARNING: reverse already refers
+  ;; to: #'clojure.core/reverse in
+  ;; namespace: user, being reversed
+  ;; by: #'clojure.string/reverse
+  ;; ...
+  ;;=> nil
+  
+  (reverse "hello")
+  ;;=> "olleh"
+#+end_src
+
+** =use :only=                                                        :slide:
+*** Loads the namespace if not already loaded
+**** Argument is a vector, must be quoted
+*** Refers only specified symbols into current namespace
 
 #+begin_src clojure
-  (ns my.cool.project
-    (:import (java.io File Writer)))
+  (ns my-ns
+    (:use [clojure.string :only (join)]))
+  ;;=> nil
+  (join "," [1 2 3])
+  ;;=> "1,2,3"
+#+end_src
 
-  File   ;=> java.io.File
+** =import=                                                           :slide:
+*** Makes Java classes available w/o package prefix in current namespace
+**** Argument is a list, quoting is optional
+*** Does not support aliases/renaming
+*** Does not support Java's =import *=
+
+#+begin_src clojure
+  (ns my-ns
+    (:import (java.io FileReader File))
+  ;;=> nil
+  (FileReader. (File. "readme.txt"))
+  ;;=> #<FileReader ...>
 #+end_src
 
 ** =ns= Complete Example                                              :slide:
@@ -201,43 +123,23 @@
              (java.net URL URI)))
 #+end_src
 
-* Private Vars
-** Private Vars                                                       :slide:
-*** Add =^:private= metadata to a definition
-**** =defn-= is shortcut for =defn ^:private=
-*** Prevents automatic refer with =use=
-*** Prevents accidental reference by qualified symbol
-*** Not truly hidden: can work around
 
-** Private Vars Example                                               :slide:
+** Namespaces and Files                                               :slide:
+*** For require/use to work, have to find code defining namespace
+*** Clojure converts namespace name to path and looks on CLASSPATH
+**** Dots in namespace name become /
+**** Hyphens become underscores
+*** Idiomatic to define namespace per file
+
+** Namespaces in the REPL                                             :slide:
+*** =in-ns= switches to namespace
+**** Creates namespace if it doesn't exist
+*** Argument is a symbol, must be quoted
+*** REPL always starts in namespace "user"
+
 #+begin_src clojure
-  user=> (def ^:private secret "trustno1")
-  ;;=> #'user/secret
-  user=> (ns foo.bar)
+  user=> (in-ns 'foo.bar.baz)
   ;;=> nil
-  foo.bar=> user/secret
-  ;; CompilerException: user/secret is not public
-  foo.bar=> @#'user/secret   ; deref the Var
-  ;;=> "trustno1"
-#+end_src
-* Namespace Introspection
-** =the-ns=                                                           :slide:
-*** Namespaces are first class objects
-*** But their /names/ are not normal symbols
-#+begin_src clojure
-  clojure.core
-  ;;=> ClassNotFoundException: clojure.core
-
-  (the-ns 'clojure.core)
-  ;;=> #<Namespace clojure.core>
+  foo.bar.baz=>
 #+end_src
 
-** Namespace Introspection                                            :slide:
-*** =ns-name=: namespace name, as a symbol
-*** =ns-map=: map of all symbols
-**** =ns-interns=: only def'd Vars
-***** =ns-publics=: only public Vars
-**** =ns-imports=: only imported classes
-**** =ns-refers=: only Vars from other namespaces
-*** =ns-aliases=: map of all aliases
-*** =clojure.repl/dir=: print public Vars
