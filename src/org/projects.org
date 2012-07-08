@@ -1,0 +1,25 @@
+#+TITLE: Clojure Projects
+
+#+TAGS: slide(s)
+
+* Files and Directories
+** Leiningen directory structure                                      :slide:
+| Path        | Purpose                   |
+|-------------+---------------------------|
+| project.clj | Project/build config      |
+| classes/    | Compiled bytecode         |
+| lib/        | Dependent JARs            |
+| public/     | HTML/CSS/JS files for web |
+| src/        | Clojure source            |
+| test/       | Unit tests                |
+
+** Maven directory structure                                         :slide:
+| Path              | Purpose                   |
+|-------------------+---------------------------|
+| pom.xml           | Project/build config      |
+| target/classes/   | Compiled bytecode         |
+| ~/.m2/repository/ | Dependent JARs            |
+| src/main/clojure  | Clojure source            |
+| src/test/clojure  | Unit tests                |
+
+*** Used by clojure-contrib libraries
