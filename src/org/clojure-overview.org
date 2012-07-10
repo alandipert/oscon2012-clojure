@@ -91,7 +91,7 @@
 | @foo            | (deref foo)                 |
 | #(+ % 5)        | (fn [x] (+ x 5))            |
 
-* Discoverability of the environment
+* Discoverability of the Environment
 ** doc                                                                :slide:
 #+begin_src clojure
   user=> (use 'clojure.repl)
@@ -152,4 +152,22 @@
   ;; stack-element-str
   ;; thread-stopper
   ;;=> nil
+#+end_src
+* Exercises
+** Exercise: Basic Math                                               :slide:
+*** Find the product of 314 and 159 using the REPL.
+** Exercise: Basic Math Solution                                      :slide:
+*** Find the product of 314 and 159 using the REPL.
+#+begin_src clojure
+  user=> (* 314 159)
+  ;=> 49926
+#+end_src
+** Exercise: Prefix Notation                                          :slide:
+*** Transform the following expression into Clojure code: (42 + 17 * 9) / 12
+** Exercise: Prefix Notation Solution                                 :slide:
+*** Transform the following expression into Clojure code: (42 + 17 * 9) / 12
+
+#+begin_src clojure
+  user=> (/ (* (+ 42 17) 9) 12)
+  ;=> 177/4
 #+end_src
