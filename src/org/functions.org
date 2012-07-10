@@ -182,3 +182,31 @@
   ;; Wrong way to make a vector:
   #([%])
 #+end_src
+
+* Exercise: Greeting                                                  :slide:
+- Make a function that takes a greeting and a variable number of people and greets them appropriately. Here's some example output.
+
+#+begin_src clojure
+  (messenger "Hello" "Clinton")
+  ;; Hello, Clinton!
+
+  (messenger "Hello" "Clinton" "Alan")
+  ;; Hello, Clinton and Alan!
+
+  (messenger "Hello" "Clinton" "Alan" "all of you")
+  ;; Hello, Clinton, Alan, and all of you!
+#+end_src
+
+- =last=, =butlast=, =list*=, and =clojure.string/join= will come in very helpful in this exercise.
+
+* Exercise: Greeting Solution
+
+#+begin_src clojure
+  (defn messenger
+    ([greeting who] (str greeting ", " who "!"))
+    ([greeting who1 who2] (str greeting ", " who1 " and " who2 "!"))
+    ([greeting who1 who2 & whos]
+      (str greeting ", "
+           (clojure.string/join ", " (butlast (list* who1 who2 whos)))
+             ", and " (last whos) "!")))
+#+end_src
