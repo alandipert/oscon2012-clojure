@@ -3,9 +3,32 @@
  * These styles will apply only to the slide-show view.
  */
 
+/*
+ * dark blue: #3C5996
+ * light blue: #90B4FE
+ * light green: #91DC47
+ * dark green: #63B131
+ */
+
 body {
    margin: 18pt;
    font-size: 24pt;
+   background-color: #EFF1F7;
+   font-family: 'PT Sans', sans-serif;
+}
+
+.presenters {
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+}
+
+#clojure-logo {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+  display: block;
 }
 
 /* Use all headings as slide titles, regardless of level. */
@@ -13,6 +36,10 @@ h1,h2,h3,h4,h5,h6,h7,h8 {
    font-size: 48pt;
    margin: 18pt;
    text-align: center;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code, h7 code, h8 code {
+  background-color: inherit;
 }
 
 li {
@@ -49,7 +76,7 @@ code {
   -webkit-border-radius: 3px;
   border-radius: 3px;
   color: black;
-  font-family: Courier, monospace;
+  font-family: 'Ubuntu Mono', sans-serif;
   font-size: .9em;
   padding: 2px 4px;
 }
@@ -67,7 +94,7 @@ pre {
   -webkit-box-shadow: 1px 1px 1px #999;
   box-shadow: 1px 1px 1px #999;
   color: black;
-  font-family: Courier, monospace;
+  font-family: 'Ubuntu Mono', sans-serif;
   margin-bottom: 40px;
   padding: 20px;
   line-height: initial;
