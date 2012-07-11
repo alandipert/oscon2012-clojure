@@ -167,20 +167,21 @@
   ;; Hello world!
 #+end_src
 
-* Terse fn reader macro                                               :slide:
+* Function literals                                                   :slide:
 
 - Terse form =#()= for short fns defined inline
   - Single argument: =%=
   - Multiple args: =%1=, =%2=, =%3=, ...
   - Variadic: =%&= for remaining args
 - Can't nest
+- Why use these? Functions over collections
 
 #+begin_src clojure
-  ;; A function to call length on arg:
-  #(length %)
+  ;; A function to square numbers
+  (def square #(* % %))
 
-  ;; Wrong way to make a vector:
-  #([%])
+  ;; A function to get the sum of squares
+  (def sum-of-squares #(+ (square %1) (square %2)))
 #+end_src
 
 * Exercise: Greeting                                                  :slide:
@@ -199,14 +200,15 @@
 
 - =last=, =butlast=, =list*=, and =clojure.string/join= will come in very helpful in this exercise.
 
-* Exercise: Greeting Solution
+* Exercise: Greeting Solution                                         :slide:
 
 #+begin_src clojure
   (defn messenger
     ([greeting who] (str greeting ", " who "!"))
     ([greeting who1 who2] (str greeting ", " who1 " and " who2 "!"))
     ([greeting who1 who2 & whos]
-      (str greeting ", "
-           (clojure.string/join ", " (butlast (list* who1 who2 whos)))
-             ", and " (last whos) "!")))
+       (str
+        greeting ", "
+        (clojure.string/join ", " (butlast (list* who1 who2 whos)))
+        ", and " (last whos) "!")))
 #+end_src
