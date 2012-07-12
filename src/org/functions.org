@@ -81,8 +81,7 @@
 
 * Multi-arity functions                                               :slide:
 
-- Can overload function by *arity*
-  - Arity: number of arguments
+- Can overload function by *arity* (number of arguments)
 - Each arity is a list =([args*] body*)=
 - One form can invoke another
 
@@ -173,8 +172,6 @@
   - Single argument: =%=
   - Multiple args: =%1=, =%2=, =%3=, ...
   - Variadic: =%&= for remaining args
-- Can't nest
-- Why use these? Functions over collections
 
 #+begin_src clojure
   ;; A function to square numbers

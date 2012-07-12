@@ -49,8 +49,6 @@ thinkrelevance.com
 #+STYLE: <link rel="stylesheet" type="text/css" href="../css/projection.css" media="projection" />
 #+STYLE: <link rel="stylesheet" type="text/css" href="../css/presenter.css" media="presenter" />
 #+STYLE: <link rel="stylesheet" type="text/css" href="../css/print.css" media="print" />
-#+STYLE: <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-#+STYLE: <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
 #+BEGIN_HTML
 <script type="text/javascript" src="../../lib/org-html-slideshow/production/org-html-slideshow.js"></script>
