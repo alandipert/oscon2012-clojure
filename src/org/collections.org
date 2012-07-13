@@ -403,3 +403,25 @@ file:../images/collections-seq-lazy-rest.svg
 (take 5 fibs)        ; consume as many as you'd like
 ;;=> (0 1 1 2 3)
 #+end_src
+
+** Exercise: What's That Song?                                        :slide:
+*** Go back to =midi.clj= from the previous exercise.
+*** Play the song in this data structure:
+
+#+begin_src clojure
+  (def notes
+    [{:note 60 :duration 1}
+     {:note 62 :duration 1}
+     {:note 64 :duration 1}
+     {:note 60 :duration 1}
+     {:note 60 :duration 1}
+     {:note 62 :duration 1}
+     {:note 64 :duration 1}
+     {:note 60 :duration 1}
+     {:note 64 :duration 1}
+     {:note 65 :duration 1}
+     {:note 67 :duration 2}
+     {:note 64 :duration 1}
+     {:note 65 :duration 1}
+     {:note 67 :duration 2}])
+#+end_src

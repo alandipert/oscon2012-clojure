@@ -20,10 +20,11 @@ thinkrelevance.com
 #+INCLUDE "clojure-overview.org" :minlevel 2
 ** Functions                                                          :slide:
 #+INCLUDE "functions.org" :minlevel 2
-** Working with Java                                                  :slide:
-#+INCLUDE "java.org" :minlevel 2
 ** Names and Namespaces                                               :slide:
 #+INCLUDE "names-and-namespaces.org" :minlevel 2
+
+** Working with Java                                                  :slide:
+#+INCLUDE "java.org" :minlevel 2
 ** Collections                                                        :slide:
 #+INCLUDE "collections.org" :minlevel 2
 ** Flow Control                                                       :slide:
@@ -31,6 +32,9 @@ thinkrelevance.com
 ** Clojure Projects                                                   :slide:
 #+INCLUDE "projects.org" :minlevel 2
 
+** HACK LIFE                                                          :slide:
+***** Clinton: @crnixon
+***** Alan: @alandipert
 * End
 #+COMMENT Bulleted lists start at outline level 4
 #+OPTIONS: h:4 toc:2
