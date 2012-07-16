@@ -10,5 +10,5 @@
 (setq font-lock-verbose nil)
 (setq enable-local-variables :all)
 
-(find-file "src/org/topic-outline.org")
+(find-file "src/org/index.org")
 (org-export-as-html nil)

@@ -22,7 +22,7 @@ Run:
 
     script/build
 
-Open the HTML file `src/org/topic-outline.html` in a web browser and
+Open the HTML file `src/org/index.html` in a web browser and
 type `t` to start the presentation.
 
 
@@ -54,7 +54,7 @@ You will need the following:
 * [clojure-mode](https://github.com/technomancy/clojure-mode) latest version
 * [htmlize](http://www.emacswiki.org/emacs/Htmlize) latest version
 
-In Emacs, open the file `src/org/topic-outline.org`. If you are
+In Emacs, open the file `src/org/index.org`. If you are
 prompted about local variables, type `!`. Type `C-c C-e h` to export
 the HTML.
 

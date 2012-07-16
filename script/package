@@ -20,7 +20,7 @@ echo "Copying slides, images, and JavaScript ..."
 cp "lib/org-html-slideshow/production/org-html-slideshow.js" "$ASSETS"
 cp -r src/css/* "$ASSETS"
 cp src/images/* "$ASSETS"
-cp "src/org/topic-outline.html" "$OUT/slides.html"
+cp "src/org/index.html" "$OUT/slides.html"
 
 
 echo "Transforming links in slide HTML ..."
