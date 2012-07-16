@@ -1,0 +1,13 @@
+#+TITLE: Welcome
+
+#+TAGS: slide(s)
+
+** Welcome                                                            :slide:
+*** Schedule
+**** 0900-1030 Introduction to Clojure - REPL, functions, Java + exercises
+**** 1030-1100 Break
+**** 1100-1230 Namespaces, Collections, Flow Control
+**** We are making this up. Who knows? There will be a break.
+*** Play Along
+**** We have thumb drives with Clooj, JDK, slides, and example code.
+**** You can get slides and example code from https://github.com/alandipert/oscon2012-clojure
