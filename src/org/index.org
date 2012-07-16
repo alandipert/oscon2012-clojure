@@ -15,6 +15,8 @@ thinkrelevance.com
 </p>
 #+END_HTML
 
+* Welcome
+#+INCLUDE "welcome.org" :minlevel 2
 * Tutorial
 ** Clojure Overview & REPL                                            :slide:
 #+INCLUDE "clojure-overview.org" :minlevel 2
