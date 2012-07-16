@@ -77,14 +77,28 @@
      :else "x is greater than or equal to 10"))
   ;;=> "x is greater than or equal to 10"
 #+end_src
+* Flow Control Exercise
+** Exercise: Improve Your Greeting Again                              :slide:
+*** Go back to your greeting code. It is kind of a complex mess. Use flow control to make it awesome.
+** Exercise: One Greeting Solution                                    :slide:
+#+begin_src clojure
+    (defn messenger [greeting & whos]
+      (let [x (count whos)]
+        (apply str greeting ", "
+               (cond
+                 (= x 0) ["!"]
+                 (< x 3) (conj (vec (interpose " and " whos)) "!")
+                 :else 
+                   (concat (vec (interpose ", " (butlast whos))) 
+                           [", and " (last whos) "!"])))))
+#+end_src clojure
+* Iteration
 ** Recursion and Iteration                                            :slide:
 *** Clojure provides =loop= and the sequence abstraction
 *** =loop= is "classic" recursion
 **** Closed to consumers, lower-level
 *** Sequences represent iteration as values
 **** Consumers can partially iterate
-
-* Iteration
 ** doseq                                                              :slide:
 *** Iterates over a sequence
 **** Similar to Java's foreach loop
