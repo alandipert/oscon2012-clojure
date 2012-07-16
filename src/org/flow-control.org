@@ -85,7 +85,6 @@
 **** Consumers can partially iterate
 
 * Iteration
-
 ** doseq                                                              :slide:
 *** Iterates over a sequence
 **** Similar to Java's foreach loop

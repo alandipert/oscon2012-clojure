@@ -404,6 +404,8 @@ file:../images/collections-seq-lazy-rest.svg
 ;;=> (0 1 1 2 3)
 #+end_src
 
+* Exercises
+
 ** Exercise: What's That Song?                                        :slide:
 *** Go back to =midi.clj= from the previous exercise.
 *** Play the song in this data structure:
@@ -425,3 +427,35 @@ file:../images/collections-seq-lazy-rest.svg
      {:note 65 :duration 1}
      {:note 67 :duration 2}])
 #+end_src
+
+** Exercise: Improve Your Greeting                                    :slide:
+*** Go back to your greeting code from the functions section. Change this so it works for any amount of people.
+
+#+begin_src clojure
+  (messenger "Hello" "Clinton")
+  ;; Hello, Clinton!
+
+  (messenger "Hello" "Clinton" "Alan")
+  ;; Hello, Clinton and Alan!
+
+  (messenger "Hello" "Clinton" "Alan" "all of you")
+  ;; Hello, Clinton, Alan, and all of you!
+
+  (messenger "Hello" "Clinton" "Alan" "Rich" "all of you")
+  ;; Hello, Clinton, Alan, Rich, and all of you!
+#+end_src
+
+*** =last=, =butlast=, =list*=, and =clojure.string/join= will come in very helpful in this exercise.
+** Exercise: Greeting Solution                                        :slide:
+#+begin_src clojure
+  (defn messenger
+    ([greeting who] (str greeting ", " who "!"))
+    ([greeting who1 who2] (str greeting ", " who1 " and " who2 "!"))
+    ([greeting who1 who2 & whos]
+       (str
+        greeting ", "
+        (clojure.string/join ", " (butlast (list* who1 who2 whos)))
+        ", and " (last whos) "!")))
+#+end_src clojure
+
+   
