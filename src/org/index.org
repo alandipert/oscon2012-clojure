@@ -7,7 +7,7 @@
 * Computing with Clojure                                              :slide:
 
 #+BEGIN_HTML
-<img id="clojure-logo" src="../images/clojure-glyph.svg" alt="../images/clojure-glyph.svg" width="300" height="300" />
+<img id="clojure-logo" src="../images/Clojure.svg" alt="../images/clojure-glyph.svg" width="300" height="300" />
 <p class="presenters">
 Alan Dipert & Clinton Dreisbach<br />
 Relevance, Inc.<br />
