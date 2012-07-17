@@ -31,9 +31,6 @@ thinkrelevance.com
 #+INCLUDE "collections.org" :minlevel 2
 ** Flow Control                                                       :slide:
 #+INCLUDE "flow-control.org" :minlevel 2
-** Clojure Projects                                                   :slide:
-#+INCLUDE "projects.org" :minlevel 2
-
 ** HACK LIFE                                                          :slide:
 ***** Clinton: @crnixon
 ***** Alan: @alandipert
